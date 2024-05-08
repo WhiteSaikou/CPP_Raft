@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <string>
 #include "binaryTo.h"
+#include <memory>
 namespace raft {
 
     namespace rpc {
@@ -16,12 +17,16 @@ namespace raft {
 
         struct append_entry_args
         {
+          public:
             int term;               // 领导人的任期
             int leader_id;          // 领导人ID 便于客户端重定向
             int prev_log_index;     // 新日志条目的上一条目的索引
             int prev_log_term;      // 新日志条目的上一条目的任期
             int leader_commit;      // leader已知的最高已提交的日志条目索引
             std::vector<log::log_entry_func> entries;
+
+            append_entry_args(int _term, int _leader_id, int _p_index, int _p_term, int _leader_commit):
+            term(_term), leader_id(_leader_id), prev_log_index(_p_index), prev_log_term(_p_term), leader_commit(leader_commit) {}
 
             void serialize_to_buf(char*& buf) {
                 binary::serialize_to_buf(term, buf);
@@ -94,7 +99,11 @@ namespace raft {
         };
         
         class raft_rpc {
-
+          private:
+            // to do
+          public:
+            std::shared_ptr<append_entry_res> request(std::shared_ptr<append_entry_args>);
+            std::shared_ptr<req_vote_res> request(std::shared_ptr<append_entry_args>);
         };
     }
 };

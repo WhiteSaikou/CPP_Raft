@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <unordered_map>
 namespace raft {
     namespace log {
         enum OPTION {
@@ -25,7 +25,10 @@ namespace raft {
         };
         
         class log_manager {
-            std::vector<log_entry> _logs;
+          private:
+            std::unordered_map<int,log_entry> _logs;
+          public:
+            const log_entry& get_entry(int index) { return _logs[index];}
         };
     }
 };

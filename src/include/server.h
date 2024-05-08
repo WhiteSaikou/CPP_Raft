@@ -23,8 +23,9 @@ namespace raft
         // Stable parameter     需要在响应RPC之前，就更新到磁盘
 
         int currentTerm;        // 服务器已知最新的任期
-        int voted_for;          // 当前任期内收到选票的 candidateId，如果没有投给任何候选人 则为空
-        log::log_manager _log;  // 日志条目；每个条目包含了用于状态机的命令，以及领导人接收到该条目时的任期（初始索引为1）
+        int voted_for;          // 当前任期内收到选票的 candidateId，如果没有投给任何候选人 则为空+
+        // std::make_shared<log::log_manager> _log;
+        std::shared_ptr<log::log_manager> _log;  // 日志条目；每个条目包含了用于状态机的命令，以及领导人接收到该条目时的任期（初始索引为1）
 
         // Volatile parameter   不需要更新到磁盘，易失性状态
         
@@ -32,6 +33,8 @@ namespace raft
         int last_applied;       // 已经被应用到状态机的最高的日志条目的索引（初始值为0，单调递增）
         int snap_shot_index;
         int snap_shot_term;     // 快照中最后一条日志的id和term
+        int last_index;         // 该节点日志中最新的日志索引
+        int last_term;          // 该节点日志中最新的日志任期
 
         // VP of leader         Leader 服务器上的易失性状态
 
@@ -43,7 +46,8 @@ namespace raft
         std::vector<std::shared_ptr<raft::rpc::raft_rpc>> rpcs;
         int _me; // 该服务器id
 
-
+        std::chrono::_V2::system_clock::time_point last_heart_beat; // 上次心跳时间
+        int heart_beat_timeout;
 
       public:
         // 对上层提供接口
@@ -53,5 +57,7 @@ namespace raft
         void leader_heart_beat(); // 循环检查是否需要心跳
 
         void do_heart_beat();
+
+        bool append_entries(std::shared_ptr<rpc::append_entry_args>, std::shared_ptr<int> appended_num);
     };
 };
