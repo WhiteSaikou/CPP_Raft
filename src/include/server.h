@@ -58,6 +58,6 @@ namespace raft
 
         void do_heart_beat();
 
-        bool append_entries(std::shared_ptr<rpc::append_entry_args>, std::shared_ptr<int> appended_num);
+        bool append_entries(int server_id, std::shared_ptr<rpc::append_entry_args>, std::shared_ptr<int> appended_num);
     };
 };

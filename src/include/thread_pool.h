@@ -38,7 +38,7 @@ namespace raft {
 
             auto task = std::make_shared<std::packaged_task<T()>>(std::bind(std::forward<F>(func), std::forward<Args>(args)...));
 
-            std::future<T> res = task->get_future();
+            std::future<T> res = task->get_future(); 
             {
                 std::unique_lock<std::mutex> _ul(_task_mutex);
                 ASSERT("push a task in a stopped thread pool!", !stop);
@@ -56,7 +56,7 @@ namespace raft {
                 {
                     sem_wait(&_task_semaphore);
                     std::unique_lock<std::mutex> ul(_task_mutex);
-                    if(stop && _task_queue.empty()) break;;
+                    if(stop && _task_queue.empty()) break;
                     task = _task_queue.front();
                     _task_queue.pop();
                 }

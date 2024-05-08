@@ -44,6 +44,8 @@ void raft::server::do_heart_beat() {
     //  重置心跳包时间 todo
 }
 
-bool raft::server::append_entries(std::shared_ptr<rpc::append_entry_args>, std::shared_ptr<int> appended_num) {
-    
+bool raft::server::append_entries(int server_id, std::shared_ptr<rpc::append_entry_args> arg, std::shared_ptr<int> appended_num) {
+    if(_state != Leader) return false;
+    auto reply =  rpcs[server_id]->request(arg); // 内部使用TCP，所以不用手动实现 5.3节的重复发送
+    if()
 }
