@@ -23,7 +23,7 @@ namespace raft {
             int prev_log_index;     // 新日志条目的上一条目的索引
             int prev_log_term;      // 新日志条目的上一条目的任期
             int leader_commit;      // leader已知的最高已提交的日志条目索引
-            std::vector<log::log_entry_func> entries;
+            std::vector<log::log_entry> entries;
 
             append_entry_args(int _term, int _leader_id, int _p_index, int _p_term, int _leader_commit):
             term(_term), leader_id(_leader_id), prev_log_index(_p_index), prev_log_term(_p_term), leader_commit(leader_commit) {}

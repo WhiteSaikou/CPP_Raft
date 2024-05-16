@@ -27,7 +27,7 @@ namespace raft {
         std::vector<std::thread> _task_threads;
 
       public:
-        static thread_pool& get(int num) {
+        static thread_pool& get(int num = 16) {
             static thread_pool thp(num);
             return thp;
         }
@@ -74,6 +74,7 @@ namespace raft {
         const thread_pool& operator=(thread_pool&&) = delete;
 
         thread_pool(int thread_num) {
+            std::cout << thread_num << std::endl;
             _task_threads.reserve(thread_num);
             sem_init(&_task_semaphore, 0, 0);
             while(thread_num--) {

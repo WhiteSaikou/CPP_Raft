@@ -1,5 +1,4 @@
-#ifndef _BINARY_TO___
-#define _BINARY_TO___
+
 #include <type_traits>
 #include <string>
 #include <vector>
@@ -327,4 +326,3 @@ void deserialize_from_buf(raft::log::log_entry_func& var, char* &buf) {
 
 
 }
-#endif
